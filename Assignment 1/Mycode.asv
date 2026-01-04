@@ -36,6 +36,8 @@ U_f_estimate = sqrt(f/2)*V; % eqn 10.4
  
 fprintf('Estimated friction velocity U_f = %.4f\n', U_f_estimate);
 
+
+% Part 1
 y_plus_estimate = U_f_estimate*y/nu;
 Re_tau_estimate = h*U_f_estimate/nu;
 
@@ -59,7 +61,7 @@ y_fit = linspace(Lower_bound_y, Upper_bound_y, 100);
 log_y_fit = log(y_fit);                
 u_fit = polyval(p, log_y_fit); 
 
-%% Inner-Scaled Mean Velocity Profile
+%Inner-Scaled Mean Velocity Profile
 figure(1);
 semilogy(u_mean, y, 'LineWidth', 2); 
 hold on;  
@@ -69,6 +71,8 @@ yline(Lower_bound_y, 'k--', 'LineWidth', 1);
 %plot fit
 semilogy(u_fit, y_fit, 'r-', 'LineWidth', 1.5);  % Fitted line in red
 
+
+% text
 A = p(1);
 B = p(2);  
 
@@ -87,10 +91,12 @@ y_specific = mean(y(valid_indices));
 U_f_calc = 0.033/2.5;
 fprintf('Calculated U_f = %.4f\n', U_f_calc);
 
+
+% Plot 1
 y_plus_calc = U_f_calc*y/nu;
 U_plus_calc = u_mean/U_f_calc;
 
-%% Mean Velocity Profile with Log-Law Fit
+% Mean Velocity Profile with Log-Law Fit
 figure(2);  
 semilogy(U_plus_calc, y_plus_calc, 'LineWidth', 2);
 hold on;
@@ -110,7 +116,7 @@ xlabel('u̅/U_f');
 legend({'Data','Viscous Sublayer', 'Buffer Layer', 'Logarithmic Layer', 'Outer Layer'}, 'Location', 'Best');
 hold off;
 
-%% Inner-Scaled profile in outer Coordinates
+% Inner-Scaled profile in outer Coordinates
 figure(3); 
 grid on;
 semilogy(U_plus_calc, y / h, 'LineWidth', 2);
@@ -137,7 +143,7 @@ A_d = 25;
 u_mean_van_driest = 2* U_f_calc * cumtrapz(y_plus_calc, 1 ./ ( 1 + ( 1 + 4 .* kappa^2 .* y_plus_calc.^2 .* ( 1 -exp(- y_plus_calc/A_d)).^2) .^(0.5)));
 u_mean_van_driest_Plus = u_mean_van_driest/U_f_calc;
 
-%% Comparison of exp profile and Van Driest Model
+% Comparison of exp profile and Van Driest Model
 figure(4);  
 semilogy(U_plus_calc, y_plus_calc, 'LineWidth', 2);
 hold on;
@@ -183,7 +189,7 @@ y_plus_valid = [0; y_plus_valid];
 vv_rms_valid = [0; vv_rms_valid];
 uv_rms_valid = [0; uv_rms_valid];
 
-%% Inner-scaled RMS Velocity Fluctuations for 0 < y+ < 100
+
 figure(6);
 plot(y_plus_valid, uu_rms_valid / U_f_calc, 'LineWidth', 2);
 %ylabel('y^+');
@@ -215,7 +221,6 @@ uv_rms = [0; uv_rms];
 
 y(end) = [];
 
-%% Outer-Scaled RMS Velocity Fluctuations
 figure(9); 
 plot(y / h, uu_rms / U_f_calc, 'LineWidth', 2);
 
@@ -236,7 +241,6 @@ xlim([0 1]);
 legend("$\sqrt{\overline{u^{\prime 2}}}/U_f$", "$\sqrt{\overline{v^{\prime 2}}}/U_f$", "$\sqrt{-\overline{u^{\prime}v^{\prime}}}/U_f$", "Interpreter", "latex")
 k = 0.5 * (uu_rms.^2 + vv_rms.^2 + 1.8.*(vv_rms).^2);
 
-%% TKE Distribution
 figure(12);
 plot(y / h, k / U_f_calc^2, 'LineWidth', 2);
 xlabel('y/h');
@@ -250,7 +254,6 @@ u_mean(end) = [];
 Reynolds_stress = Tau - mu* gradient(u_mean, y);
 uv = rho*uv_rms.^2;
 
-%% Comparison of Reynolds Shear Stressx
 figure(15);
 plot(y/h, Reynolds_stress / U_f_calc^2,'LineWidth', 2);
 hold on;
@@ -269,8 +272,7 @@ Tau_plot = Tau.* gradient(u_mean, y);
 
 uv_EE = uv.* gradient(u_mean, y);
 
-
-%% TKE Production Terms
+% Main figure
 figure(16);
 plot(EE, y/h, 'LineWidth', 2); 
 hold on;
@@ -299,9 +301,8 @@ velocity_RANS = readmatrix('MatRANS_Output/velocity.csv');
 energy_k_RANS = readmatrix('MatRANS_Output/energy_k.csv');
 yparameter = readmatrix("MatRANS_Output/yparameter.csv");
 
-%% Comparison of Turbulent Kinetic Energy:
 figure(20);
-plot(k / U_f_calc^2,y / h,'x','MarkerSize', 8,'LineWidth', 2);
+plot(k / U_f_calc^2,y / h, 'LineWidth', 2);
 hold on;
 plot(energy_k_RANS, yparameter, 'LineWidth', 2);
 ylabel('y/h');
@@ -309,11 +310,10 @@ xlabel('$k/U_f^2$','Interpreter','latex');
 legend("Experimental", "RANS");
 grid on;
 hold off;
-xlim([0 5]);
+xlim([0 1]);
 
-%% Comparison of Mean Velocity Profile:
 figure(21);
-plot(u_mean / U_f_calc ,y / h,'x','MarkerSize', 8,'LineWidth', 2);
+plot(u_mean / U_f_calc ,y / h, 'LineWidth', 2);
 hold on;
 plot(velocity_RANS, yparameter, 'LineWidth', 2);
 ylabel('y/h');
@@ -322,7 +322,6 @@ legend("Experimental", "RANS");
 grid on;
 hold off;
 turb_energy_production = rho * uv_rms.^2 .* gradient(u_mean, y);
-
 
 
 
