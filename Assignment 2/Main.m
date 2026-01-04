@@ -1,6 +1,6 @@
 clc; clear; close all;
 
-%% Info
+%% Info    
 Cases = getAllWaveConditions();
 nu = 1.14e-6;
 
@@ -308,3 +308,6 @@ plot(k3, y3,'b','LineWidth',1); hold on; grid on;
 plot(k4, y4,'r','LineWidth',1);
 xlabel("$k / U_{0m}^2$",'Interpreter','latex','FontSize',14);
 ylabel("$y / a$",'Interpreter','latex','FontSize',14);
+
+
+
